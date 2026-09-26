@@ -7,9 +7,10 @@
   "scripts": {
     "lint": "eslint . --ext .ts,.tsx",
     "format": "prettier --write \"src/**/*.{ts,tsx}\"",
-    "dev": "node src/stub-server.ts",
-    "build": "tsc",
-    "start": "node dist/index.js",
+    "dev": "node api.js && node src/stub-server.ts",
+    "build": "node api.js && npm run openapi:generate && tsc",
+    "openapi:generate": "node scripts/generate-openapi.js",
+    "start": "node api.js && node dist/index.js",
     "test": "jest",
     "migrate": "ts-node -e \"const { Pool } = require('pg'); const { runMigrations } = require('./src/migrate'); if (!process.env.DATABASE_URL) { console.error('DATABASE_URL is required'); process.exit(1); } const pool = new Pool({ connectionString: process.env.DATABASE_URL }); runMigrations(pool).then(() => pool.end()).catch((err) => { console.error(err); return pool.end().finally(() => process.exit(1)); });\""
   },
